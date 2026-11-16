@@ -70,7 +70,9 @@ codesign --force --deep --sign - "$B" >/dev/null
 # ---------------------------------------------------------------- remove old version
 say "Removing the old BatteryKit (your password is needed)"
 sudo -v
-BACKUP="$HOME/BatteryKit-old-$(date +%Y%m%d-%H%M%S)"
+# Keep only the most recent previous install, out of sight.
+BACKUP="$HOME/Library/Application Support/BatteryKit Backup"
+sudo rm -rf "$BACKUP"
 mkdir -p "$BACKUP"
 shopt -s nullglob nocaseglob
 
