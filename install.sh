@@ -108,6 +108,8 @@ if [[ -d "$SUPPORT" ]]; then
     fi
 fi
 sudo chown -R "$UID_NUM" "$BACKUP" 2>/dev/null || true
+# Rename backed-up app bundles so Spotlight and Launchpad don't list them as apps.
+for a in "$BACKUP"/*.app; do sudo mv "$a" "$a.old"; done
 rmdir "$BACKUP" 2>/dev/null || true   # nothing was replaced: no backup folder needed
 
 # ---------------------------------------------------------------- install service
@@ -167,6 +169,9 @@ cat > "$AGENT_PLIST" <<PLIST
 </plist>
 PLIST
 launchctl bootstrap "gui/$UID_NUM" "$AGENT_PLIST"
+
+# The build folder holds a second copy of the app; remove it so only /Applications/BatteryKit.app shows up.
+rm -rf "$BUILD"
 
 # ---------------------------------------------------------------- report
 sleep 4
